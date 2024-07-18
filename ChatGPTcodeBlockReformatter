@@ -1,0 +1,39 @@
+<%*
+const input = tp.file.content;
+const lines = input.split('\n');
+let output = "";
+let i = 0;
+
+while (i < lines.length) {
+    if (lines[i].trim() === "Copy code") {
+        // Get the language line from two lines above
+        const langLine = lines[i - 2].trim();
+        const lang = langLine;
+        
+        // Find the code block enclosed in single backticks
+        let codeLine = "";
+        for (let j = i + 1; j < lines.length; j++) {
+            if (lines[j].includes("`")) {
+                codeLine = lines[j].trim().replace(/`/g, ""); // Remove the backticks
+                i = j; // Move the index to the line containing the code
+                break;
+            }
+        }
+        
+        // Wrap the code block
+        output += `\`\`\`${lang}\n${codeLine}\n\`\`\`\n`;
+
+        // Skip the language line, "Copy code" line, and the code line
+        i += 1; // This accounts for the current "Copy code" line already
+    } else if ((i + 1 < lines.length && lines[i + 1].trim() === "Copy code") || (i + 2 < lines.length && lines[i + 2].trim() === "Copy code")) {
+        // Skip the language line and "Copy code" line
+        i += 1;
+    } else {
+        // Copy the line to the output
+        output += lines[i] + '\n';
+    }
+    i++;
+}
+
+tR = output;
+%>
